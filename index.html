@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShipTrack Pro | Shipping Department System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{
+      --bg:#eef3f8; --panel:#ffffff; --panel2:#f8fafc; --ink:#0f172a; --muted:#64748b; --line:#dbe4ee;
+      --blue:#2563eb; --blue2:#1d4ed8; --green:#16a34a; --red:#dc2626; --orange:#f97316; --purple:#7c3aed;
+      --shadow:0 20px 60px rgba(15,23,42,.10); --shadow2:0 10px 28px rgba(15,23,42,.08); --radius:22px;
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,sans-serif;background:linear-gradient(rgba(0,0,0,.62),rgba(0,0,0,.62)),url('vessel.jpg') no-repeat center center fixed;background-size:cover;color:var(--ink)}
+    button,input,select,textarea{font:inherit} button{cursor:pointer;border:0} .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+    .side{background:linear-gradient(180deg,var(--blue2),#0b1220);color:white;padding:24px;position:sticky;top:0;height:100vh;overflow:auto}.brand{display:flex;gap:16px;align-items:center;margin-bottom:26px}.logo{width:90px;height:90px;border-radius:18px;background:transparent;display:grid;place-items:center;font-weight:900;box-shadow:none;overflow:hidden}.logo img{width:100%;height:100%;object-fit:contain;display:block}.brand h1{font:900 22px 'Plus Jakarta Sans';margin:0}.brand small{color:#bfdbfe}.nav{display:grid;gap:9px}.nav button{width:100%;padding:13px 14px;border-radius:16px;text-align:left;color:#cbd5e1;background:transparent;font-weight:750}.nav button.active,.nav button:hover{background:rgba(255,255,255,.10);color:#fff}.syncbox{margin-top:24px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:14px;color:#cbd5e1;font-size:12px;line-height:1.55}.main{padding:24px;overflow:hidden}.top{display:flex;gap:14px;align-items:center;justify-content:space-between;margin-bottom:18px}.top h2{margin:0;font:900 28px 'Plus Jakarta Sans';color:white} .top p{margin:5px 0 0;color:rgba(255,255,255,.75)}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{padding:11px 15px;border-radius:14px;font-weight:800;background:#e2e8f0;color:#0f172a}.btn.primary{background:var(--blue);color:white}.btn.danger{background:#fee2e2;color:#991b1b}.btn.green{background:#dcfce7;color:#166534}.btn.dark{background:#0f172a;color:white}.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(5,minmax(150px,1fr))}.card{background:rgba(255,255,255,.55);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.25);border-radius:var(--radius);box-shadow:var(--shadow2);padding:18px}.card.solid-card{background:rgba(255,255,255,.15);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2)}.stat b{font-size:28px}.stat span{display:block;color:var(--muted);font-weight:700;font-size:13px;margin-top:5px}.toolbar{display:grid;grid-template-columns:1.4fr repeat(4, minmax(140px,.55fr));gap:10px;margin:18px 0}.field{display:grid;gap:7px}.field label{font-size:12px;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.04em}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:14px;padding:11px 12px;background:#fff;color:var(--ink);outline:none}.field textarea{min-height:82px;resize:vertical}.tablewrap{overflow:auto;border-radius:22px;border:1px solid var(--line);background:white;box-shadow:var(--shadow2)}table{width:100%;border-collapse:collapse;min-width:1200px}th,td{padding:14px;border-bottom:1px solid #e5edf5;text-align:left;vertical-align:top;font-size:13px}th{background:#f8fafc;color:#475569;font-size:12px;text-transform:uppercase;letter-spacing:.04em}tr:hover td{background:#fbfdff}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:900}.pill.green{background:#dcfce7;color:#166534}.pill.red{background:#fee2e2;color:#991b1b}.pill.orange{background:#ffedd5;color:#9a3412}.pill.blue{background:#dbeafe;color:#1e40af}.pill.purple{background:#ede9fe;color:#5b21b6}.muted{color:var(--muted)}.rowactions{display:flex;gap:7px;flex-wrap:wrap}.iconbtn{padding:8px 10px;border-radius:12px;background:#f1f5f9;font-weight:900}.customerlink{border:0;background:transparent;text-align:left;padding:0;color:#0f172a;line-height:1.35}.customerlink b{color:#0f172a}.customerlink span{color:#64748b}.customerlink:hover b{text-decoration:underline;color:var(--blue)}.hidden{display:none!important}.modal{position:fixed;inset:0;background:rgba(2,6,23,.62);display:grid;place-items:center;padding:18px;z-index:50}.modalbox{width:min(1120px,96vw);max-height:92vh;overflow:auto;background:#fff;border-radius:28px;box-shadow:0 25px 80px rgba(2,6,23,.35)}.modalhead{position:sticky;top:0;background:#fff;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px;border-bottom:1px solid var(--line);border-radius:28px 28px 0 0}.modalbody{padding:20px}.formgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.formgrid .wide{grid-column:1/-1}.formgrid .half{grid-column:span 2}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tab{padding:10px 13px;border-radius:13px;background:#f1f5f9;font-weight:900}.tab.active{background:#0f172a;color:white}.section{border:1px solid var(--line);border-radius:20px;padding:16px;background:#fbfdff;margin-top:12px}.checkgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.checkitem{display:flex;align-items:center;gap:9px;background:white;border:1px solid var(--line);border-radius:14px;padding:10px;font-weight:700}.docgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.doc{border:1px solid var(--line);background:white;border-radius:16px;padding:12px}.doc b{display:block;word-break:break-word}.timeline{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.timebox{background:white;border:1px solid var(--line);border-radius:16px;padding:12px}.timebox span{display:block;color:var(--muted);font-size:11px;font-weight:900;text-transform:uppercase}.custcards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.progress{height:9px;background:#e2e8f0;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,#2563eb,#16a34a);border-radius:99px}.printarea{display:none}.toast{position:fixed;right:22px;bottom:22px;background:#0f172a;color:white;padding:13px 16px;border-radius:16px;font-weight:800;box-shadow:var(--shadow);z-index:80}.settings{display:grid;grid-template-columns:1fr 1fr;gap:14px}.small{font-size:12px;color:var(--muted);line-height:1.5}.kanban{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.kcol{background:#f8fafc;border:1px solid var(--line);border-radius:20px;padding:12px;min-height:240px}.kcol h3{margin:0 0 10px;font-size:14px}.kcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px;box-shadow:0 8px 20px rgba(15,23,42,.05)}
+    @media(max-width:1000px){.app{grid-template-columns:1fr}.side{height:auto;position:relative}.nav{grid-template-columns:repeat(3,1fr)}.stats,.toolbar,.formgrid,.checkgrid,.docgrid,.timeline,.custcards,.kanban,.settings{grid-template-columns:1fr}.main{padding:16px}.top{align-items:flex-start;flex-direction:column}.modalbox{width:100%}table{min-width:980px}}
+    @media print{body{background:white}.app,.modal,.toast{display:none!important}.printarea{display:block;padding:20px}.print-card{border:1px solid #111;padding:18px;margin-bottom:14px}.print-card h1{margin:0 0 8px}.print-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.print-table{width:100%;min-width:0;border-collapse:collapse}.print-table td,.print-table th{border:1px solid #111;padding:7px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo"><img src="logo.png" alt="ShipTrack Logo"></div><div><h1 id="brandName">ShipTrack Pro</h1><small>Shipping Department Control Tower</small></div></div>
+    <div class="nav">
+      <button class="active" onclick="showPage('dashboard',this)">🏠 Dashboard</button>
+      <button onclick="showPage('shipments',this)">🚢 Shipment List</button>
+      <button onclick="showPage('customers',this)">👥 Customer View</button>
+      <button onclick="showPage('calendar',this)">📅 Timeline / Closing</button>
+      
+      <button onclick="showPage('reports',this)">📊 Reports</button>
+      <button onclick="showPage('settings',this)">⚙️ Settings</button>
+    </div>
+    <div class="syncbox">
+      <b>Sync Mode:</b> <span id="syncMode">Local Browser</span><br>
+      Untuk team guna banyak device, isi Supabase URL & anon key dekat Settings. Kalau kosong, data simpan local sahaja.
+    </div>
+  </aside>
+  <main class="main">
+    <div class="top"><div><h2 id="pageTitle">Dashboard</h2><p>Track ETA, ETD, container movement, port closing, documents, customer status and sales/marketing reference.</p></div><div class="actions"><button class="btn primary" onclick="openShipment()">+ New Shipment</button><button class="btn" onclick="exportBackup()">Export Backup</button><button class="btn" onclick="document.getElementById('importFile').click()">Import</button><input id="importFile" type="file" accept="application/json" class="hidden" onchange="importBackup(event)"></div></div>
+    <section id="dashboard" class="page"></section>
+    <section id="shipments" class="page hidden"></section>
+    <section id="customers" class="page hidden"></section>
+    <section id="calendar" class="page hidden"></section>
+    
+    <section id="reports" class="page hidden"></section>
+    <section id="settings" class="page hidden"></section>
+  </main>
+</div>
+<div id="modalRoot"></div><div id="toast" class="toast hidden"></div><div id="printArea" class="printarea"></div>
+<script>
+const STORAGE_KEY='shiptrack_pro_v1';
+const defaultDocs=['Booking Confirmation','Commercial Invoice','Packing List','Shipping Instruction','Draft BL','Final BL','K2 / Export Customs Form','FTA / CO','Fumigation Certificate','Insurance','VGM','Telex Release','Payment Proof','Delivery Order'];
+const stages=['Planning','Booked','Loading','Customs','Sailed','Completed'];
+const SUPABASE_URL='https://oekfwbnbaksuuhfjupvx.supabase.co';
+const SUPABASE_KEY='sb_publishable_M4Rpc0KAxe13umq3IwfMIA_TVKhg_W2';
+const SUPABASE_TABLE='shipments';
+let db={shipments:[],settings:{supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_KEY,table:SUPABASE_TABLE,company:'ShipTrack Pro',theme:'#2563eb'}};
+let sb=null;
+function formatDate(d){
+ if(!d) return '-';
+ const parts=d.split('-');
+ if(parts.length!==3) return d;
+ return `${parts[2]}-${parts[1]}-${parts[0]}`;
+}
+
+function uid(){return 'SHP-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).slice(2,6).toUpperCase()}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),2200)}
+function load(){
+  const defaultSettings={supabaseUrl:'https://oekfwbnbaksuuhfjupvx.supabase.co',supabaseKey:'sb_publishable_M4Rpc0KAxe13umq3IwfMIA_TVKhg_W2',table:'shipments',company:'ShipTrack Pro',theme:'#2563eb'};
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if(saved){ db=saved; db.settings={...(db.settings||{}),...defaultSettings}; }
+  }catch(e){}
+  applySettings(); initSupabase(); renderAll(); if(sb) syncDown();
+}
+function saveLocal(){localStorage.setItem(STORAGE_KEY,JSON.stringify(db))}
+async function save(){saveLocal(); if(sb){await syncUp()} renderAll()}
+function applySettings(){
+  const company = db.settings.company || 'ShipTrack Pro';
+  const color = db.settings.theme || '#2563eb';
+
+  document.documentElement.style.setProperty('--blue', color);
+  document.documentElement.style.setProperty('--blue2', color);
+  document.title = company + ' | Shipping System';
+
+  const brandName = document.getElementById('brandName');
+  if(brandName) brandName.textContent = company;
+}
+function initSupabase(){db.settings.supabaseUrl=SUPABASE_URL;db.settings.supabaseKey=SUPABASE_KEY;db.settings.table=SUPABASE_TABLE;if(window.supabase){sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);document.getElementById('syncMode').textContent='Supabase + Local Backup'}else{sb=null;document.getElementById('syncMode').textContent='Local Browser'}}
+async function syncDown(){
+  if(!sb)return toast('Supabase not connected');
+  const {data,error}=await sb.from(SUPABASE_TABLE).select('*');
+  if(error)return toast('Sync error: '+error.message);
+  db.shipments=(data||[]).map(x=>x.data||x).filter(Boolean);
+  saveLocal(); renderAll(); toast('Data synced from Supabase');
+}
+async function syncUp(){
+  if(!sb){ toast('Supabase not connected'); return; }
+  for(const s of db.shipments){
+    const {error}=await sb.from(db.settings.table||'shipments').upsert({id:s.id,data:s,updated_at:new Date().toISOString()});
+    if(error){ toast('Supabase upload error: '+error.message); return; }
+  }
+  toast('Uploaded to Supabase');
+}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn?.classList.add('active');document.getElementById('pageTitle').textContent=btn?btn.textContent.replace(/[🏠🚢👥📅📂📊⚙️]/g,'').trim():id;renderAll()}
+function statusPill(s){let c=s==='Completed'?'green':s==='Sailed'?'blue':s==='Customs'?'purple':s==='Loading'?'orange':s==='Booked'?'blue':'red';return `<span class="pill ${c}">${s||'Planning'}</span>`}
+function risk(s){const today=new Date().toISOString().slice(0,10); if(s.portClosing&&s.portClosing<=today&&s.stage!=='Sailed'&&s.stage!=='Completed')return '<span class="pill red">Closing Risk</span>'; if(s.etd&&s.etd<=today&&s.stage!=='Sailed'&&s.stage!=='Completed')return '<span class="pill orange">ETD Due</span>'; return '<span class="pill green">On Track</span>'}
+function docProgress(s){const docs=s.docs||[]; const done=defaultDocs.filter(d=>docs.some(x=>x.type===d)).length; return Math.round(done/defaultDocs.length*100)}
+function filtered(){const q=(document.getElementById('search')?.value||'').toLowerCase();const cust=document.getElementById('fCustomer')?.value||'';const st=document.getElementById('fStage')?.value||'';const type=document.getElementById('fType')?.value||'';return db.shipments.filter(s=>(!q||JSON.stringify(s).toLowerCase().includes(q))&&(!cust||s.customer===cust)&&(!st||s.stage===st)&&(!type||s.shipmentType===type))}
+function toolbar(){const customers=[...new Set(db.shipments.map(s=>s.customer).filter(Boolean))].sort();return `<div class="toolbar"><input id="search" placeholder="Search shipment, customer, PI/SO, container, BL, country..." oninput="renderAll()"><select id="fCustomer" onchange="renderAll()"><option value="">All Customers</option>${customers.map(c=>`<option>${c}</option>`).join('')}</select><select id="fStage" onchange="renderAll()"><option value="">All Stages</option>${stages.map(s=>`<option>${s}</option>`).join('')}</select><select id="fType" onchange="renderAll()"><option value="">All Types</option><option>FCL</option><option>LCL</option><option>Air Freight</option><option>Courier</option><option>Local Delivery</option></select><button class="btn dark" onclick="printReport()">Print Report</button></div>`}
+function shipmentTable(list){return `<div class="tablewrap"><table><thead><tr><th>Shipment</th><th>Customer</th><th>Route</th><th>Vessel / Voyage</th><th>ETA / ETD</th><th>Truck / Closing</th><th>Volume</th><th>Docs</th><th>Status</th><th>Action</th></tr></thead><tbody>${list.map(s=>`<tr><td><b>${s.ref||s.id}</b><br><span class="muted">${s.so||''}</span><br>${risk(s)}</td><td><button class="customerlink" onclick="openCustomerPopup('${s.customer||'No Customer'}')"><b>${s.customer||'-'}</b><br><span>${s.salesOwner||'No owner'}</span></button></td><td>${s.pol||'-'} → ${s.pod||'-'}<br><span class="muted">${s.country||''}</span></td><td><b>${s.vessel||'-'}</b><br><span class="muted">${s.voyage||''}</span></td><td>ETD: <b>${formatDate(s.etd)}</b><br>ETA: <b>${formatDate(s.eta)}</b></td><td>In: ${formatDate(s.truckIn)}<br>Out: ${formatDate(s.truckOut)}<br>Closing: <b>${formatDate(s.portClosing)}</b></td><td>${s.shipmentType||'-'}<br>${s.volume||'-'}<br>${s.containerNo||''}</td><td><div class="progress"><i style="width:${docProgress(s)}%"></i></div><small>${docProgress(s)}% completed</small></td><td>${statusPill(s.stage)}</td><td><div class="rowactions"><button class="iconbtn" onclick="openShipment('${s.id}')">Edit</button><button class="iconbtn" onclick="printShipment('${s.id}')">Print</button><button class="iconbtn" onclick="duplicateShipment('${s.id}')">Copy</button><button class="iconbtn" onclick="deleteShipment('${s.id}')">Delete</button></div></td></tr>`).join('')}</tbody></table></div>`}
+function renderDashboard(){const total=db.shipments.length, active=db.shipments.filter(s=>!['Completed'].includes(s.stage)).length, closing=db.shipments.filter(s=>risk(s).includes('Closing')).length, sailed=db.shipments.filter(s=>s.stage==='Sailed').length, docs=Math.round((db.shipments.reduce((a,s)=>a+docProgress(s),0)/(total||1)));document.getElementById('dashboard').innerHTML=`<div class="grid stats"><div class="card stat"><b>${total}</b><span>Total Shipments</span></div><div class="card stat"><b>${active}</b><span>Active / Pending</span></div><div class="card stat"><b>${closing}</b><span>Port Closing Risk</span></div><div class="card stat"><b>${sailed}</b><span>Sailed</span></div><div class="card stat"><b>${docs}%</b><span>Average Docs Complete</span></div></div><div class="grid" style="grid-template-columns:1.2fr .8fr;margin-top:16px"><div class="card solid-card"><h3>Latest Shipments</h3>${shipmentTable(db.shipments.slice(0,8))}</div><div class="card"><h3>Control Tower by Stage</h3><div class="kanban">${stages.map(st=>`<div class="kcol"><h3>${st}</h3>${db.shipments.filter(s=>(s.stage||'Planning')===st).slice(0,5).map(s=>`<div class="kcard"><b>${s.ref||s.id}</b><br><span class="muted">${s.customer||'-'} · ETD ${s.etd||'-'}</span></div>`).join('')}</div>`).join('')}</div></div></div>`}
+function renderShipments(){document.getElementById('shipments').innerHTML=toolbar()+shipmentTable(filtered())}
+function renderCustomers(){const groups={};db.shipments.forEach(s=>{groups[s.customer||'No Customer']=groups[s.customer||'No Customer']||[];groups[s.customer||'No Customer'].push(s)});document.getElementById('customers').innerHTML=`<div class="custcards">${Object.entries(groups).map(([c,arr])=>`<div class="card"><h3>${c}</h3><p class="muted">${arr.length} shipments · Sales/Marketing Owner: ${arr[0].salesOwner||'-'}</p><p>Active: <b>${arr.filter(s=>s.stage!=='Completed').length}</b> · Sailed: <b>${arr.filter(s=>s.stage==='Sailed').length}</b></p><button class="btn primary" onclick="customerDetail('${c.replaceAll("'","&#39;")}')">View Customer Shipments</button></div>`).join('')}</div>`}
+function customerDetail(c){document.getElementById('customers').innerHTML=`<button class="btn" onclick="renderCustomers()">← Back</button><h3>${c}</h3>${shipmentTable(db.shipments.filter(s=>(s.customer||'No Customer')===c))}`}
+function renderCalendar(){const list=[...db.shipments].sort((a,b)=>(a.portClosing||a.etd||'9999').localeCompare(b.portClosing||b.etd||'9999'));document.getElementById('calendar').innerHTML=`<div class="card"><h3>Upcoming Port Closing / ETD / ETA</h3>${shipmentTable(list)}</div>`}
+function renderDocuments(){let docs=[];db.shipments.forEach(s=>(s.docs||[]).forEach(d=>docs.push({...d,shipment:s.ref||s.id,customer:s.customer,id:s.id})));document.getElementById('documents').innerHTML=`<div class="card"><h3>Document Library</h3><p class="muted">All uploaded/linked documents by shipment.</p><div class="docgrid">${docs.map(d=>`<div class="doc"><b>${d.type}</b><span class="muted">${d.shipment} · ${d.customer||'-'}</span><br>${d.dataUrl?`<button class="iconbtn" onclick='viewDocument(${JSON.stringify(d)})'>View File</button>`:(d.url?`<a class="iconbtn" href="${d.url}" target="_blank">Open Link</a>`:'<span class="muted">No preview file</span>')}<br><small>${d.name||''}</small></div>`).join('')||'<p class="muted">No documents yet.</p>'}</div></div>`}
+function renderReports(){const byCust={};db.shipments.forEach(s=>byCust[s.customer||'No Customer']=(byCust[s.customer||'No Customer']||0)+1);document.getElementById('reports').innerHTML=`<div class="grid" style="grid-template-columns:1fr 1fr"><div class="card"><h3>Shipment by Customer</h3>${Object.entries(byCust).map(([k,v])=>`<p><b>${k}</b> — ${v}</p>`).join('')}</div><div class="card"><h3>Department Reminders</h3><p>🔴 Check shipment with port closing risk.</p><p>🟠 Update ETA/ETD after vessel rollover.</p><p>🟣 Upload final BL, K2, FTA/CO after approval.</p><p>🟢 Sales/Marketing can filter by customer and check status without asking shipping team repeatedly.</p></div></div>`}
+function renderSettings(){document.getElementById('settings').innerHTML=`<div class="settings"><div class="card"><h3>Company / Theme</h3><div class="field"><label>System Name</label><input id="setCompany" value="${db.settings.company||''}"></div><div class="field"><label>Main Color</label><input id="setTheme" type="color" value="${db.settings.theme||'#2563eb'}"></div><button class="btn primary" onclick="saveSettings()">Save Settings</button></div><div class="card"><h3>Supabase Sync</h3><p class="small">Create table in Supabase first: <b>shipments</b> with columns <b>id text primary key</b>, <b>data jsonb</b>.</p><div class="field"><label>Supabase Project URL</label><input id="setUrl" value="${db.settings.supabaseUrl||''}" placeholder="https://xxxx.supabase.co"></div><div class="field"><label>Supabase Anon / Publishable Key</label><input id="setKey" value="${db.settings.supabaseKey||''}" placeholder="sb_publishable_xxx"></div><div class="field"><label>Table Name</label><input id="setTable" value="shipments" readonly></div><div class="actions"><button class="btn primary" onclick="saveSettings(true)">Save & Connect</button><button class="btn green" onclick="syncDown()">Sync From Supabase</button><button class="btn" onclick="syncUp().then(()=>toast('Uploaded to Supabase'))">Upload Local Data</button></div></div></div>`}
+function renderAll(){renderDashboard();renderShipments();renderCustomers();renderCalendar();renderReports();renderSettings()}
+function saveSettings(connect=false){
+  const companyInput = document.getElementById('setCompany');
+  const themeInput = document.getElementById('setTheme');
+  const urlInput = document.getElementById('setUrl');
+  const keyInput = document.getElementById('setKey');
+  const tableInput = document.getElementById('setTable');
+
+  db.settings.company = companyInput ? (companyInput.value.trim() || 'ShipTrack Pro') : (db.settings.company || 'ShipTrack Pro');
+  db.settings.theme = themeInput ? (themeInput.value || '#2563eb') : (db.settings.theme || '#2563eb');
+  db.settings.supabaseUrl = urlInput ? urlInput.value.trim() : (db.settings.supabaseUrl || '');
+  db.settings.supabaseKey = keyInput ? keyInput.value.trim() : (db.settings.supabaseKey || '');
+  db.settings.table = 'shipments';
+
+  saveLocal();
+  applySettings();
+  initSupabase();
+  renderAll();
+  showPage('settings', document.querySelector('.nav button[onclick*="settings"]'));
+  toast(connect ? 'Settings saved & Supabase ready' : 'Settings saved');
+}
+function openShipment(id){const s=id?db.shipments.find(x=>x.id===id):{id:uid(),stage:'Planning',docs:[],createdAt:new Date().toISOString()};document.getElementById('modalRoot').innerHTML=`<div class="modal"><div class="modalbox"><div class="modalhead"><div><h2>${id?'Edit':'New'} Shipment</h2><span class="muted">${s.ref||s.id}</span></div><button class="btn" onclick="closeModal()">Close</button></div><div class="modalbody"><div class="tabs"><button class="tab active" onclick="modalTab('info',this)">Shipment Info</button><button class="tab" onclick="modalTab('timelineTab',this)">Timeline</button><button class="tab" onclick="modalTab('docsTab',this)">Documents</button><button class="tab" onclick="modalTab('notesTab',this)">Notes</button></div><div id="info" class="mtab"><div class="formgrid">${input('Reference','ref',s.ref)}${input('Customer Name','customer',s.customer)}${input('Sales/Marketing Owner','salesOwner',s.salesOwner)}${input('SO/PI/PO No.','so',s.so)}${select('Shipment Stage','stage',s.stage,stages)}${select('Shipment Type','shipmentType',s.shipmentType,['FCL','LCL','Air Freight','Courier','Local Delivery'])}<div class="field"><label>Country</label><select id="country">${[
+'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan',
+'Bahamas','Bahrain','Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan','Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria','Burkina Faso','Burundi',
+'Cambodia','Cameroon','Canada','Cape Verde','Central African Republic','Chad','Chile','China','Colombia','Comoros','Congo','Costa Rica','Croatia','Cuba','Cyprus','Czech Republic',
+'Denmark','Djibouti','Dominica','Dominican Republic',
+'East Timor','Ecuador','Egypt','El Salvador','Equatorial Guinea','Eritrea','Estonia','Eswatini','Ethiopia',
+'Fiji','Finland','France',
+'Gabon','Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea','Guinea-Bissau','Guyana',
+'Haiti','Honduras','Hungary',
+'Iceland','India','Indonesia','Iran','Iraq','Ireland','Israel','Italy',
+'Jamaica','Japan','Jordan',
+'Kazakhstan','Kenya','Kiribati','Korea North','Korea South','Kuwait','Kyrgyzstan',
+'Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein','Lithuania','Luxembourg',
+'Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia','Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar',
+'Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger','Nigeria','North Macedonia','Norway',
+'Oman',
+'Pakistan','Palau','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal',
+'Qatar',
+'Romania','Russia','Rwanda',
+'Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Samoa','San Marino','Sao Tome and Principe','Saudi Arabia','Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia','South Africa','South Sudan','Spain','Sri Lanka','Sudan','Suriname','Sweden','Switzerland','Syria',
+'Taiwan','Tajikistan','Tanzania','Thailand','Togo','Tonga','Trinidad and Tobago','Tunisia','Turkey','Turkmenistan','Tuvalu',
+'Uganda','Ukraine','United Arab Emirates','United Kingdom','United States','Uruguay','Uzbekistan',
+'Vanuatu','Vatican City','Venezuela','Vietnam',
+'Yemen',
+'Zambia','Zimbabwe'
+].map(c=>`<option ${c===s.country?'selected':''}>${c}</option>`).join('')}</select></div>${input('POL','pol',s.pol)}${input('POD','pod',s.pod)}${input('Forwarder / Agent','forwarder',s.forwarder)}${input('Carrier / Shipping Line','carrier',s.carrier)}${input('Booking No.','bookingNo',s.bookingNo)}${input('BL No.','blNo',s.blNo)}${input('Container No.','containerNo',s.containerNo)}${input('Seal No.','sealNo',s.sealNo)}${input('Volume','volume',s.volume)}${input('Incoterm','incoterm',s.incoterm)}${input('Freight Term','freightTerm',s.freightTerm)}${input('HS Code / Product','hsCode',s.hsCode)}<div class="field wide"><label>Cargo Description</label><textarea id="cargoDesc">${s.cargoDesc||''}</textarea></div></div></div><div id="timelineTab" class="mtab hidden"><div class="formgrid">${date('ETD','etd',s.etd)}${date('ETA','eta',s.eta)}${date('Port Opening','portOpening',s.portOpening)}${date('Port Closing','portClosing',s.portClosing)}${date('Container Truck In','truckIn',s.truckIn)}${date('Container Truck Out','truckOut',s.truckOut)}${date('Loading Date','loadingDate',s.loadingDate)}${date('Fumigation Date','fumigationDate',s.fumigationDate)}${input('Vessel Name','vessel',s.vessel)}${input('Voyage','voyage',s.voyage)}<div class="field wide"><label>Rollover / Delay Reason</label><textarea id="delayReason">${s.delayReason||''}</textarea></div></div></div><div id="docsTab" class="mtab hidden"><div class="section"><h3>Document Checklist</h3><div class="checkgrid">${defaultDocs.map(d=>`<label class="checkitem"><input type="checkbox" class="doccheck" value="${d}" ${(s.docs||[]).some(x=>x.type===d)?'checked':''}> ${d}</label>`).join('')}</div></div><div class="section"><h3>Add Document</h3><p class="small">Upload file dekat sini akan disimpan dalam data system dan boleh preview. Untuk file besar / banyak device, lebih stabil kalau upload ke Supabase Storage/Google Drive dan paste link URL.</p><div class="formgrid"><div class="field"><label>Document Type</label><select id="docType">${defaultDocs.map(d=>`<option>${d}</option>`).join('')}</select></div><div class="field"><label>File / Name</label><input id="docFile" type="file"></div><div class="field"><label>File Link URL</label><input id="docUrl" placeholder="https://..."></div></div><button class="btn green" onclick="addDocTemp()">Add Document</button><div id="docList" class="docgrid" style="margin-top:10px">${(s.docs||[]).map((d,i)=>docHtml(d,i)).join('')}</div></div></div><div id="notesTab" class="mtab hidden"><div class="field"><label>Internal Shipping Notes</label><textarea id="notes">${s.notes||''}</textarea></div><div class="field"><label>Sales/Marketing Public Update</label><textarea id="publicUpdate">${s.publicUpdate||''}</textarea></div></div><div class="actions" style="margin-top:18px"><button class="btn primary" onclick="saveShipment('${s.id}')">Save Shipment</button><button class="btn" onclick="closeModal()">Cancel</button></div></div></div></div>`; window.tempDocs=[...(s.docs||[])]}
+function input(l,id,v=''){return `<div class="field"><label>${l}</label><input id="${id}" value="${String(v||'').replaceAll('"','&quot;')}"></div>`} function date(l,id,v=''){return `<div class="field"><label>${l}</label><input id="${id}" type="date" value="${v||''}"></div>`} function select(l,id,v,arr){return `<div class="field"><label>${l}</label><select id="${id}">${arr.map(a=>`<option ${a===v?'selected':''}>${a}</option>`).join('')}</select></div>`}
+function modalTab(id,btn){document.querySelectorAll('.mtab').forEach(x=>x.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
+function docHtml(d,i){return `<div class="doc"><b>${d.type}</b><small>${d.name||''}</small><br>${d.dataUrl?`<button class="iconbtn" onclick="viewDocTemp(${i})">View File</button>`:''}${d.url?` <a class="iconbtn" href="${d.url}" target="_blank">Open Link</a>`:''}<br><button class="iconbtn" onclick="removeDocTemp(${i})">Remove</button></div>`}
+function viewDocTemp(i){const d=window.tempDocs[i]; if(!d)return; viewDocument(d)}
+function addDocTemp(){
+ const f=document.getElementById('docFile').files[0];
+ const finish=(dataUrl='')=>{const d={type:docType.value,name:f?f.name:(docUrl.value||'Document Link'),url:docUrl.value,dataUrl:dataUrl,mime:f?f.type:'',addedAt:new Date().toISOString()};window.tempDocs.push(d);docList.innerHTML=window.tempDocs.map((x,i)=>docHtml(x,i)).join('');docUrl.value='';docFile.value=''};
+ if(f){const r=new FileReader();r.onload=()=>finish(r.result);r.readAsDataURL(f)}else{finish('')}
+}
+function removeDocTemp(i){window.tempDocs.splice(i,1);docList.innerHTML=window.tempDocs.map((x,i)=>docHtml(x,i)).join('')}
+function viewDocument(d){
+ if(d.dataUrl){
+   const w=window.open('','_blank');
+   if(!w){toast('Popup blocked. Please allow popup.');return}
+   if((d.mime||'').startsWith('image/')) w.document.write(`<title>${d.name}</title><body style="margin:0;background:#111;display:grid;place-items:center;min-height:100vh"><img src="${d.dataUrl}" style="max-width:100%;max-height:100vh"></body>`);
+   else if((d.mime||'').includes('pdf')) w.document.write(`<title>${d.name}</title><iframe src="${d.dataUrl}" style="border:0;width:100vw;height:100vh"></iframe>`);
+   else w.document.write(`<title>${d.name}</title><iframe src="${d.dataUrl}" style="border:0;width:100vw;height:100vh"></iframe>`);
+   w.document.close(); return;
+ }
+ if(d.url){window.open(d.url,'_blank');return}
+ toast('No file preview available for this document')
+}
+function saveShipment(id){const keys=['ref','customer','salesOwner','so','stage','shipmentType','country','pol','pod','forwarder','carrier','bookingNo','blNo','containerNo','sealNo','volume','incoterm','freightTerm','hsCode','cargoDesc','etd','eta','portOpening','portClosing','truckIn','truckOut','loadingDate','fumigationDate','vessel','voyage','delayReason','notes','publicUpdate'];let s=db.shipments.find(x=>x.id===id)||{id,createdAt:new Date().toISOString(),docs:[]};keys.forEach(k=>{const el=document.getElementById(k); if(el)s[k]=el.value});document.querySelectorAll('.doccheck:checked').forEach(ch=>{if(!window.tempDocs.some(d=>d.type===ch.value))window.tempDocs.push({type:ch.value,name:'Checklist marked done',url:'',addedAt:new Date().toISOString()})});s.docs=window.tempDocs||[];s.updatedAt=new Date().toISOString();if(!db.shipments.some(x=>x.id===id))db.shipments.unshift(s);saveLocal();renderAll();closeModal();toast('Shipment saved locally');syncUp();}
+function closeModal(){document.getElementById('modalRoot').innerHTML=''}
+function openCustomerPopup(customer){
+ const list=db.shipments.filter(s=>(s.customer||'No Customer')===customer);
+ const latest=list[0]||{};
+ const docs=[]; list.forEach(s=>(s.docs||[]).forEach(d=>docs.push({...d,shipment:s.ref||s.id})));
+ document.getElementById('modalRoot').innerHTML=`<div class="modal"><div class="modalbox"><div class="modalhead"><div><h2>${customer}</h2><span class="muted">Customer shipping profile & document library</span></div><button class="btn" onclick="closeModal()">Close</button></div><div class="modalbody"><div class="grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px"><div class="card stat"><b>${list.length}</b><span>Total Shipments</span></div><div class="card stat"><b>${list.filter(s=>s.stage!=='Completed').length}</b><span>Active</span></div><div class="card stat"><b>${list.filter(s=>risk(s).includes('Closing')).length}</b><span>Closing Risk</span></div><div class="card stat"><b>${latest.salesOwner||'-'}</b><span>Sales/Marketing Owner</span></div></div><div class="section"><h3>Important Details</h3><div class="timeline"><div class="timebox"><span>Latest Ref</span><b>${latest.ref||latest.id||'-'}</b></div><div class="timebox"><span>Route</span><b>${latest.pol||'-'} → ${latest.pod||'-'}</b></div><div class="timebox"><span>Vessel</span><b>${latest.vessel||'-'}</b></div><div class="timebox"><span>ETD</span><b>${latest.etd||'-'}</b></div><div class="timebox"><span>ETA</span><b>${latest.eta||'-'}</b></div><div class="timebox"><span>Port Closing</span><b>${latest.portClosing||'-'}</b></div></div><p class="muted" style="margin-bottom:0">${latest.publicUpdate||latest.notes||'No latest update yet.'}</p></div><div class="section"><h3>Customer Shipments</h3>${shipmentTable(list)}</div><div class="section"><h3>Documents</h3><div class="docgrid">${docs.map(d=>`<div class="doc"><b>${d.type}</b><span class="muted">${d.shipment}</span><br>${d.dataUrl?`<button class="iconbtn" onclick='viewDocument(${JSON.stringify(d)})'>View File</button>`:(d.url?`<a class="iconbtn" href="${d.url}" target="_blank">Open Link</a>`:'<span class="muted">No preview file</span>')}<br><small>${d.name||''}</small></div>`).join('')||'<p class="muted">No documents uploaded for this customer yet.</p>'}</div></div></div></div></div>`;
+}
+function deleteShipment(id){if(confirm('Delete this shipment?')){db.shipments=db.shipments.filter(s=>s.id!==id);save();toast('Shipment deleted')}}
+function duplicateShipment(id){const s={...db.shipments.find(x=>x.id===id)};s.id=uid();s.ref=(s.ref||'Shipment')+' COPY';s.createdAt=new Date().toISOString();db.shipments.unshift(s);save();toast('Shipment duplicated')}
+function exportBackup(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='shiptrack-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click()}
+function importBackup(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{db=JSON.parse(r.result);saveLocal();renderAll();toast('Backup imported')}catch(err){toast('Invalid backup file')}};r.readAsText(f)}
+function printShipment(id){const s=db.shipments.find(x=>x.id===id);document.getElementById('printArea').innerHTML=`<div class="print-card"><h1>Shipment Status Report</h1><div class="print-grid"><p><b>Ref:</b> ${s.ref||s.id}</p><p><b>Customer:</b> ${s.customer||'-'}</p><p><b>Route:</b> ${s.pol||'-'} → ${s.pod||'-'}</p><p><b>Vessel:</b> ${s.vessel||'-'} ${s.voyage||''}</p><p><b>ETD:</b> ${s.etd||'-'}</p><p><b>ETA:</b> ${s.eta||'-'}</p><p><b>Port Closing:</b> ${s.portClosing||'-'}</p><p><b>Container:</b> ${s.containerNo||'-'}</p></div><h3>Public Update</h3><p>${s.publicUpdate||'-'}</p></div>`;window.print()}
+function printReport(){document.getElementById('printArea').innerHTML=`<h1>Shipping Department Report</h1>${shipmentTable(filtered()).replace('tablewrap','')}`;window.print()}
+load();
+</script>
+</body>
+</html>
