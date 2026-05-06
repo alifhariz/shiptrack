@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="shortcut icon" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+
   <title>ShipTrack Pro | Shipping Department System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -255,7 +259,24 @@ function openCustomerPopup(customer){
  const docs=[]; list.forEach(s=>(s.docs||[]).forEach(d=>docs.push({...d,shipment:s.ref||s.id})));
  document.getElementById('modalRoot').innerHTML=`<div class="modal"><div class="modalbox"><div class="modalhead"><div><h2>${customer}</h2><span class="muted">Customer shipping profile & document library</span></div><button class="btn" onclick="closeModal()">Close</button></div><div class="modalbody"><div class="grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px"><div class="card stat"><b>${list.length}</b><span>Total Shipments</span></div><div class="card stat"><b>${list.filter(s=>s.stage!=='Completed').length}</b><span>Active</span></div><div class="card stat"><b>${list.filter(s=>risk(s).includes('Closing')).length}</b><span>Closing Risk</span></div><div class="card stat"><b>${latest.salesOwner||'-'}</b><span>Sales/Marketing Owner</span></div></div><div class="section"><h3>Important Details</h3><div class="timeline"><div class="timebox"><span>Latest Ref</span><b>${latest.ref||latest.id||'-'}</b></div><div class="timebox"><span>Route</span><b>${latest.pol||'-'} → ${latest.pod||'-'}</b></div><div class="timebox"><span>Vessel</span><b>${latest.vessel||'-'}</b></div><div class="timebox"><span>ETD</span><b>${latest.etd||'-'}</b></div><div class="timebox"><span>ETA</span><b>${latest.eta||'-'}</b></div><div class="timebox"><span>Port Closing</span><b>${latest.portClosing||'-'}</b></div></div><p class="muted" style="margin-bottom:0">${latest.publicUpdate||latest.notes||'No latest update yet.'}</p></div><div class="section"><h3>Customer Shipments</h3>${shipmentTable(list)}</div><div class="section"><h3>Documents</h3><div class="docgrid">${docs.map(d=>`<div class="doc"><b>${d.type}</b><span class="muted">${d.shipment}</span><br>${d.dataUrl?`<button class="iconbtn" onclick='viewDocument(${JSON.stringify(d)})'>View File</button>`:(d.url?`<a class="iconbtn" href="${d.url}" target="_blank">Open Link</a>`:'<span class="muted">No preview file</span>')}<br><small>${d.name||''}</small></div>`).join('')||'<p class="muted">No documents uploaded for this customer yet.</p>'}</div></div></div></div></div>`;
 }
-function deleteShipment(id){if(confirm('Delete this shipment?')){db.shipments=db.shipments.filter(s=>s.id!==id);save();toast('Shipment deleted')}}
+
+async function deleteShipmentFromSupabase(id){
+  if(!sb) return;
+  const { error } = await sb.from(db.settings.table || 'shipments').delete().eq('id', id);
+  if(error){
+    toast('Supabase delete error: ' + error.message);
+  }
+}
+
+async function deleteShipment(id){
+  if(confirm('Delete this shipment?')){
+    db.shipments = db.shipments.filter(s => s.id !== id);
+    saveLocal();
+    renderAll();
+    await deleteShipmentFromSupabase(id);
+    toast('Shipment deleted');
+  }
+}
 function duplicateShipment(id){const s={...db.shipments.find(x=>x.id===id)};s.id=uid();s.ref=(s.ref||'Shipment')+' COPY';s.createdAt=new Date().toISOString();db.shipments.unshift(s);save();toast('Shipment duplicated')}
 function exportBackup(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='shiptrack-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click()}
 function importBackup(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{db=JSON.parse(r.result);saveLocal();renderAll();toast('Backup imported')}catch(err){toast('Invalid backup file')}};r.readAsText(f)}
